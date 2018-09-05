@@ -1,0 +1,96 @@
+﻿@model IEnumerable<HotelBookingStartupProject.Models.Booking>
+
+@{
+    ViewData["Title"] = "Index";
+    int year = ViewBag.YearToDisplay;
+    List<DateTime> fullyOccupiedDates = (List<DateTime>)ViewBag.FullyOccupiedDates;
+}
+
+<h2>Bookings</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<p>
+    <a asp-action="Index" asp-route-id="@(year+1)">Next year</a>
+    <a asp-action="Index" asp-route-id="@(year-1)">Previous year</a>
+</p>
+
+@*Calender display*@
+<table class="table">
+    <tr>
+        <th>@year</th>
+        @for (int day = 1; day <= 31; day++)
+        {
+            <th>@day</th>
+        }
+    </tr>
+
+    @for (int month = 1; month <= 12; month++)
+    {
+        <tr>
+            <td>
+                @System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedMonthName(month)
+            </td>
+
+            @for (int day = 1; day <= 31; day++)
+            {
+                @*<td bgcolor="red">o</td>*@
+                DateTime occupiedDate = DateTime.MinValue;
+                if (day <= DateTime.DaysInMonth(year, month))
+                {
+                    DateTime dt = new DateTime(year, month, day);
+                    occupiedDate = fullyOccupiedDates.FirstOrDefault(d => d == dt);
+                }
+                <td @if (occupiedDate > DateTime.MinValue) { <text> class="bg-danger" </text>  }>
+                </td>
+            }
+        </tr>
+    }
+
+</table>
+
+@*List of bookings*@
+<table class="table">
+    <thead>
+        <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.StartDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.EndDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.IsActive)
+                </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Customer)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Room)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EndDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsActive)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Customer.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Room.Id)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
