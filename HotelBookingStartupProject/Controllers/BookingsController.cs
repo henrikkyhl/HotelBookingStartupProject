@@ -14,9 +14,12 @@ namespace HotelBookingStartupProject.Controllers
     {
         private readonly HotelBookingContext _context;
 
-        public BookingsController(HotelBookingContext context)
-        {
-            _context = context;
+        public BookingsController(){
+            // Create database context
+            var options = new DbContextOptionsBuilder<HotelBookingContext>()
+                .UseInMemoryDatabase("HotelBookingDb")
+                .Options;
+            _context = new HotelBookingContext(options);
         }
 
         // GET: Bookings

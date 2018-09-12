@@ -8,7 +8,6 @@ namespace HotelBookingStartupProject.Data
         public HotelBookingContext (DbContextOptions<HotelBookingContext> options)
             : base(options)
         {
-            DbInitializer.Initialize(this);
         }
 
         public DbSet<Booking> Booking { get; set; }

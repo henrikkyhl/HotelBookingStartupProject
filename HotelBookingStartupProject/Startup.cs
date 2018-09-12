@@ -19,7 +19,6 @@ namespace HotelBookingStartupProject
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<HotelBookingContext>(opt => opt.UseInMemoryDatabase("HotelBookingDb"));
             services.AddMvc();
         }
 
@@ -30,6 +29,13 @@ namespace HotelBookingStartupProject
             {                
                 app.UseDeveloperExceptionPage();
                 app.UseBrowserLink();
+
+                // Seed the database
+                var options = new DbContextOptionsBuilder<HotelBookingContext>()
+                    .UseInMemoryDatabase("HotelBookingDb")
+                    .Options;
+                var dbContext = new HotelBookingContext(options);
+                DbInitializer.Initialize(dbContext);
             }
             else
             {

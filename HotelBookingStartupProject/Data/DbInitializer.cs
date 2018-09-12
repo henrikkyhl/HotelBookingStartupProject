@@ -9,6 +9,13 @@ namespace HotelBookingStartupProject.Data
     {
         public static void Initialize(HotelBookingContext context)
         {
+            // Delete the database, if it already exists. I do this because an
+            // existing database may not be compatible with the entity model,
+            // if the entity model was changed since the database was created.
+            context.Database.EnsureDeleted();
+
+            // Create the database, if it does not already exists. This operation
+            // is necessary, if you use an SQL Server database.
             context.Database.EnsureCreated();
 
             // Look for any bookings.
